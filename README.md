@@ -1,4 +1,6 @@
-# Command Agent v2
+# MultAgent-Local
+
+## Command Agent v2
 
 Versao organizada para publicacao no GitHub do agente local com Ollama e Textual.
 
@@ -71,4 +73,3 @@ python -m command_agent.app
 ## Publicacao no GitHub
 
 Publique somente esta pasta `command_agent_v2/`. A raiz antiga do workspace contem ambientes virtuais, logs e artefatos locais que nao devem subir para o repositrio.
-
