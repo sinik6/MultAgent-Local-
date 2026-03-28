@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "command-agent"
+version = "2.0.0"
+description = "Agente local restrito para comandos seguros com Ollama."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "ollama>=0.4.7",
+  "textual>=0.85.0",
+]
+
+[project.scripts]
+command-agent = "command_agent.agent:main"
+command-agent-ui = "command_agent.app:run"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+

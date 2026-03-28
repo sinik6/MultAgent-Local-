@@ -1,0 +1,4 @@
+ollama>=0.4.7
+textual>=0.85.0
+pytest>=8.3.0
+
