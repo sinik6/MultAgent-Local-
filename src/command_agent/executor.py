@@ -53,6 +53,17 @@ def _sanitize_filename(filename: str | None) -> str:
     return clean_name
 
 
+def describe_executor() -> dict:
+    return {
+        "safe_roots": [str(path) for path in SAFE_ROOTS],
+        "allowed_commands": sorted(SAFE_COMMANDS.keys()),
+        "default_text_dir": str(DEFAULT_TEXT_DIR),
+        "logs_dir": str(LOGS_DIR),
+        "outputs_dir": str(OUTPUTS_DIR),
+        "command_timeout": COMMAND_TIMEOUT_SECONDS,
+    }
+
+
 def write_log(data: dict) -> None:
     file_path = LOGS_DIR / f"log_{datetime.now().strftime('%Y%m%d')}.jsonl"
     with file_path.open("a", encoding="utf-8") as file:
