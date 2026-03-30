@@ -10,6 +10,8 @@ __pycache__/
 .coverage
 htmlcov/
 .localdata/
+logs/
+outputs/
 dist/
 build/
 *.egg-info/

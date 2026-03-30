@@ -6,7 +6,7 @@ def format_result(result: dict) -> str:
 
     status = "OK" if result.get("ok") else "ERRO"
     lines.append(f"Status: {status}")
-    lines.append(f"Acao: {result.get('action')}")
+    lines.append(f"Modo: {result.get('action')}")
     lines.append("")
 
     arguments = result.get("arguments") or {}

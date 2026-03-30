@@ -2,42 +2,22 @@
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Ollama](https://img.shields.io/badge/Ollama-Local%20LLM-111111)](https://ollama.com/)
-[![Textual](https://img.shields.io/badge/UI-Textual-5E5CE6)](https://textual.textualize.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
 
-Agente local para comandos em linguagem natural com interface terminal, regras claras e execucao restrita.
+Agente local para comandos em linguagem natural com foco em terminal, execucao restrita e configuracao segura.
 
 ## Highlights
 
-- CLI e interface Textual
+- modo terminal leve para Windows
 - integracao com Ollama
-- leitura e criacao segura de `.txt`
-- whitelist de comandos do sistema
-- logs e outputs fora do Git
-- estrutura pronta para publicar no GitHub
+- leitura e criacao segura de arquivos `.txt`
+- comandos do sistema via whitelist
+- configuracao por env vars ou arquivo JSON
+- logs e saidas fora do Git
 
-## Preview
+## Como rodar
 
-```text
-+--------------------------------------------------------------+
-| Command Agent v2                                             |
-| Digite um comando em linguagem natural e pressione Enter     |
-|--------------------------------------------------------------|
-| > mostre o hostname                                          |
-|                                                              |
-| Status: OK                                                   |
-| Acao: run_safe_command                                       |
-|                                                              |
-| Saida:                                                       |
-| - comando: hostname                                          |
-| - returncode: 0                                              |
-|                                                              |
-| [stdout]                                                     |
-| MEU-PC                                                       |
-+--------------------------------------------------------------+
-```
-
-## Instalacao
+Instalacao:
 
 ```powershell
 python -m venv .venv
@@ -46,25 +26,76 @@ pip install -r requirements.txt
 ollama pull qwen2.5-coder:7b
 ```
 
-## Uso
-
-### CLI
+Modo interativo:
 
 ```powershell
-$env:PYTHONPATH = (Resolve-Path .\src).Path
+python run_app.py
+```
+
+Atalhos para Windows:
+
+```powershell
+.\run.bat
+```
+
+ou
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\run.ps1
+```
+
+Modo direto:
+
+```powershell
 python run_cli.py "mostre o hostname"
 ```
 
-### Interface
+## Comandos da sessao
 
-```powershell
-$env:PYTHONPATH = (Resolve-Path .\src).Path
-python run_app.py
+- `/help`
+- `/clear`
+- `/exit`
+- `/model`
+- `/roots`
+- `/commands`
+- `/history`
+
+## Exemplo de terminal
+
+```text
+Digite uma instrucao em linguagem natural.
+Comandos da sessao: /help /clear /exit /model /roots /commands /history
+
+Exemplos:
+- mostre o hostname
+- liste os arquivos da pasta atual
+- leia um arquivo txt permitido
+========================================================================
+
+> mostre o hostname
+usuario
+mostre o hostname
+
+llm  thinking...
+
+llm
+Status: OK
+Modo: run_safe_command
+
+Argumentos:
+- command: hostname
+
+Saida:
+- comando: hostname
+- returncode: 0
 ```
 
 ## Configuracao
 
-O projeto usa variaveis de ambiente. Veja `.env.example`.
+O projeto aceita configuracao por variaveis de ambiente ou por um dos arquivos:
+
+- `.command_agent.json`
+- `command_agent.json`
 
 Principais opcoes:
 
@@ -80,6 +111,19 @@ Exemplo minimo:
 ```powershell
 $env:COMMAND_AGENT_SAFE_ROOTS = (Resolve-Path .).Path
 $env:COMMAND_AGENT_DEFAULT_TEXT_DIR = (Resolve-Path .).Path
+```
+
+Exemplo de arquivo JSON:
+
+```json
+{
+  "model": "qwen2.5-coder:7b",
+  "safe_roots": ["."],
+  "default_text_dir": ".",
+  "allowed_commands": ["whoami", "hostname"],
+  "data_dir": ".localdata",
+  "command_timeout": 30
+}
 ```
 
 ## Acoes suportadas
@@ -99,15 +143,6 @@ Comandos liberados por padrao:
 - `ipconfig`
 - `tasklist`
 
-## Exemplos
-
-```powershell
-python run_cli.py "mostre o diretorio atual"
-python run_cli.py "liste os arquivos da pasta atual"
-python run_cli.py "crie um arquivo chamado nota.txt com o conteudo teste"
-python run_cli.py "leia o arquivo nota.txt"
-```
-
 ## Seguranca
 
 - aceita apenas acoes conhecidas
@@ -119,7 +154,6 @@ python run_cli.py "leia o arquivo nota.txt"
 ## Testes
 
 ```powershell
-$env:PYTHONPATH = (Resolve-Path .\src).Path
 python -m pytest -q
 ```
 
@@ -130,6 +164,8 @@ src/command_agent/
 tests/
 run_app.py
 run_cli.py
+run.bat
+run.ps1
 requirements.txt
 pyproject.toml
 ```

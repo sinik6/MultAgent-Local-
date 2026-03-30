@@ -26,17 +26,27 @@ def ask_model(text: str) -> dict:
         return {"action": "unsupported", "arguments": {}}
 
 
+def process_instruction(text: str) -> dict:
+    parsed = ask_model(text)
+    if parsed.get("action") == "unsupported":
+        return {
+            "ok": False,
+            "action": "unsupported",
+            "arguments": {},
+            "output": None,
+            "error": "Comando nao suportado pelo agente.",
+        }
+    return execute_action(parsed["action"], parsed.get("arguments", {}))
+
+
 def main() -> None:
     text = " ".join(sys.argv[1:]).strip()
     if not text:
-        print("Uso: python -m command_agent \"sua instrucao\"")
-        raise SystemExit(1)
+        from .terminal import run_terminal
 
-    parsed = ask_model(text)
-    if parsed.get("action") == "unsupported":
-        print("nao suportado")
+        run_terminal()
         return
 
-    result = execute_action(parsed["action"], parsed.get("arguments", {}))
+    result = process_instruction(text)
     print(json.dumps(result, indent=2, ensure_ascii=False))
 

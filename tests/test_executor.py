@@ -53,3 +53,12 @@ def test_list_files_in_path_inside_safe_root(monkeypatch, tmp_path: Path):
     assert listed["ok"] is True
     assert "a.txt" in listed["output"]
     assert "b.txt" in listed["output"]
+
+
+def test_run_safe_command_returns_structured_output():
+    result = executor.execute_action("run_safe_command", {"command": "hostname"})
+
+    assert result["action"] == "run_safe_command"
+    assert isinstance(result["output"], dict)
+    assert "stdout" in result["output"]
+    assert "returncode" in result["output"]
